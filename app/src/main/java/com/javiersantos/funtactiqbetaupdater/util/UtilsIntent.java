@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.util;
+package com.javiersantos.funtactiqbetaupdater.util;
 
 import android.content.Intent;
 import android.net.Uri;

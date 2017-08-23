@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.activity;
+package com.javiersantos.funtactiqbetaupdater.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,14 +14,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.javiersantos.whatsappbetaupdater.R;
-import com.javiersantos.whatsappbetaupdater.WhatsAppBetaUpdaterApplication;
-import com.javiersantos.whatsappbetaupdater.util.AppPreferences;
-import com.javiersantos.whatsappbetaupdater.util.UtilsApp;
-import com.javiersantos.whatsappbetaupdater.util.UtilsAsync;
-import com.javiersantos.whatsappbetaupdater.util.UtilsDialog;
-import com.javiersantos.whatsappbetaupdater.util.UtilsEnum;
-import com.javiersantos.whatsappbetaupdater.util.UtilsWhatsApp;
+import com.javiersantos.funtactiqbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.FuntactiqBetaUpdaterApplication;
+import com.javiersantos.funtactiqbetaupdater.util.AppPreferences;
+import com.javiersantos.funtactiqbetaupdater.util.UtilsApp;
+import com.javiersantos.funtactiqbetaupdater.util.UtilsAsync;
+import com.javiersantos.funtactiqbetaupdater.util.UtilsDialog;
+import com.javiersantos.funtactiqbetaupdater.util.UtilsEnum;
+import com.javiersantos.funtactiqbetaupdater.util.UtilsFuntactiq;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean doubleBackToExitPressedOnce = false;
 
     // Variables
-    private TextView whatsapp_latest_version, whatsapp_installed_version, toolbar_subtitle;
+    private TextView funtactiq_latest_version, funtactiq_installed_version, toolbar_subtitle;
     private FloatingActionButton fab;
     private ProgressWheel progressWheel;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -41,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.appPreferences = WhatsAppBetaUpdaterApplication.getAppPreferences();
+        this.appPreferences = FuntactiqBetaUpdaterApplication.getAppPreferences();
         this.fab = (FloatingActionButton) findViewById(R.id.fab);
         this.toolbar_subtitle = (TextView) findViewById(R.id.toolbar_subtitle);
-        this.whatsapp_latest_version = (TextView) findViewById(R.id.whatsapp_latest_version);
-        this.whatsapp_installed_version = (TextView) findViewById(R.id.whatsapp_installed_version);
+        this.funtactiq_latest_version = (TextView) findViewById(R.id.funtactiq_latest_version);
+        this.funtactiq_installed_version = (TextView) findViewById(R.id.funtactiq_installed_version);
         this.swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         this.progressWheel = (ProgressWheel) findViewById(R.id.progress_wheel);
 
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new UtilsAsync.LatestWhatsAppVersion(MainActivity.this, whatsapp_latest_version, toolbar_subtitle, fab, progressWheel).execute();
-                checkInstalledWhatsAppVersion();
+                new UtilsAsync.LatestFuntactiqVersion(MainActivity.this, funtactiq_latest_version, toolbar_subtitle, fab, progressWheel).execute();
+                checkInstalledFuntactiqVersion();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UtilsAsync.DownloadFile(MainActivity.this, UtilsEnum.DownloadType.WHATSAPP_APK, whatsapp_latest_version.getText().toString()).execute();
+                new UtilsAsync.DownloadFile(MainActivity.this, UtilsEnum.DownloadType.FUNTACTIQ_APK, funtactiq_latest_version.getText().toString()).execute();
             }
         });
 
@@ -94,18 +94,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // Check if there is a newest WhatsApp update and show UI changes
-        new UtilsAsync.LatestWhatsAppVersion(this, whatsapp_latest_version, toolbar_subtitle, fab, progressWheel).execute();
+        // Check if there is a newest Funtactiq update and show UI changes
+        new UtilsAsync.LatestFuntactiqVersion(this, funtactiq_latest_version, toolbar_subtitle, fab, progressWheel).execute();
 
-        // Get latest WhatsApp installed version
-        checkInstalledWhatsAppVersion();
+        // Get latest Funtactiq installed version
+        checkInstalledFuntactiqVersion();
     }
 
-    private void checkInstalledWhatsAppVersion() {
-        if (UtilsWhatsApp.isWhatsAppInstalled(this)) {
-            whatsapp_installed_version.setText(UtilsWhatsApp.getInstalledWhatsAppVersion(this));
+    private void checkInstalledFuntactiqVersion() {
+        if (UtilsFuntactiq.isFuntactiqInstalled(this)) {
+            funtactiq_installed_version.setText(UtilsFuntactiq.getInstalledFuntactiqVersion(this));
         } else {
-            whatsapp_installed_version.setText(getResources().getString(R.string.whatsapp_not_installed));
+            funtactiq_installed_version.setText(getResources().getString(R.string.funtactiq_not_installed));
         }
     }
 

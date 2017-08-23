@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WhatsApp 用ベータ版アップデーター</string>
+    <string name="app_name">Funtactiq 用ベータ版アップデーター</string>
     <string name="action_settings">設定</string>
     <string name="action_donate">寄付する</string>
-    <string name="whatsapp_installed">インストール済のバージョン</string>
-    <string name="whatsapp_latest">最新バージョン</string>
-    <string name="whatsapp_not_installed">インストールされていません</string>
+    <string name="funtactiq_installed">インストール済のバージョン</string>
+    <string name="funtactiq_latest">最新バージョン</string>
+    <string name="funtactiq_not_installed">インストールされていません</string>
     <string name="update_available">アップデート %s が利用可能です!</string>
     <string name="update_not_available">最新バージョンを利用しています</string>
     <string name="update_not_connection">インターネット接続が使用できません</string>
@@ -25,22 +25,22 @@
     <string name="settings_category_notifications">通知</string>
     <string name="settings_category_about">アプリついて</string>
     <string name="settings_notifications">通知を有効にする</string>
-    <string name="settings_notifications_description">自動的に新しい WhatsApp のアップデートを確認して、新しいものが利用可能なときに通知します</string>
+    <string name="settings_notifications_description">自動的に新しい Funtactiq のアップデートを確認して、新しいものが利用可能なときに通知します</string>
     <string name="settings_notifications_sound">通知音</string>
     <string name="settings_interval">通知の頻度</string>
     <string name="settings_interval_description">%s 時間ごと</string>
     <string name="settings_app_update">アップデートの確認</string>
     <string name="settings_app_update_description">バグ修正と改善された最新のアップデートを受信します</string>
     <string name="settings_autodownload">アップデートを自動ダウンロード</string>
-    <string name="settings_autodownload_description">アプリケーションの起動時に、自動的に新しい WhatsApp のアップデートをダウンロードして、インストールを開始します</string>
+    <string name="settings_autodownload_description">アプリケーションの起動時に、自動的に新しい Funtactiq のアップデートをダウンロードして、インストールを開始します</string>
     <string name="settings_license">オープンソース ライセンス</string>
     <string name="settings_googleplus">Google+ でコミュニティに参加</string>
-    <string name="settings_googleplus_description">WhatsApp の新しいバージョンについての話をしたり、開発に後れを取らないようにしたいですか? 私たちのコミュニティに参加してください!</string>
+    <string name="settings_googleplus_description">Funtactiq の新しいバージョンについての話をしたり、開発に後れを取らないようにしたいですか? 私たちのコミュニティに参加してください!</string>
     <string name="settings_about">Javier Santos により %s で作成。ソースコードは GitHub.</string>
     <string name="toast_tap">もう一度タップすると、アプリを閉じます</string>
     <string name="snackbar_saved">%s を \"Downloads\" に保存しました</string>
-    <string name="snackbar_share">%2$s を使用して WhatsApp %1$s をインストールしました</string>
+    <string name="snackbar_share">%2$s を使用して Funtactiq %1$s をインストールしました</string>
     <string name="snackbar_failed">アップデートのダウンロード中に何か問題が発生しました。もう一度試してください。</string>
-    <string name="notification">WhatsApp %s が利用できます</string>
+    <string name="notification">Funtactiq %s が利用できます</string>
     <string name="notification_description">%s を使用して今すぐアップデート</string>
 </resources>

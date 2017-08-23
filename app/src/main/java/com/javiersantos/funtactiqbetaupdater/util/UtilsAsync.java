@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.util;
+package com.javiersantos.funtactiqbetaupdater.util;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -10,15 +10,16 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.javiersantos.whatsappbetaupdater.Config;
-import com.javiersantos.whatsappbetaupdater.R;
-import com.javiersantos.whatsappbetaupdater.WhatsAppBetaUpdaterApplication;
-import com.javiersantos.whatsappbetaupdater.activity.MainActivity;
+import com.javiersantos.funtactiqbetaupdater.Config;
+import com.javiersantos.funtactiqbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.FuntactiqBetaUpdaterApplication;
+import com.javiersantos.funtactiqbetaupdater.activity.MainActivity;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.io.BufferedReader;
@@ -33,20 +34,20 @@ import java.net.URL;
 
 public class UtilsAsync {
 
-    public static class LatestWhatsAppVersion extends AsyncTask<Void, Void, String> {
+    public static class LatestFuntactiqVersion extends AsyncTask<Void, Void, String> {
         private TextView latestVersion, toolbarSubtitle;
         private FloatingActionButton fab;
         private ProgressWheel progressWheel;
         private Context context;
         private AppPreferences appPreferences;
 
-        public LatestWhatsAppVersion(Context context, TextView latestVersion, TextView toolbarSubtitle, FloatingActionButton fab, ProgressWheel progressWheel) {
+        public LatestFuntactiqVersion(Context context, TextView latestVersion, TextView toolbarSubtitle, FloatingActionButton fab, ProgressWheel progressWheel) {
             this.latestVersion = latestVersion;
             this.toolbarSubtitle = toolbarSubtitle;
             this.fab = fab;
             this.progressWheel = progressWheel;
             this.context = context;
-            this.appPreferences = WhatsAppBetaUpdaterApplication.getAppPreferences();
+            this.appPreferences = FuntactiqBetaUpdaterApplication.getAppPreferences();
         }
 
         @Override
@@ -60,7 +61,7 @@ public class UtilsAsync {
         @Override
         protected String doInBackground(Void... voids) {
             if (UtilsNetwork.isNetworkAvailable(context)) {
-                return getLatestWhatsAppVersion();
+                return getLatestFuntactiqVersion();
             } else {
                 return "0.0.0.0";
             }
@@ -74,13 +75,13 @@ public class UtilsAsync {
 
             if (!version.equals("0.0.0.0")) {
                 latestVersion.setText(version);
-                if (UtilsWhatsApp.isWhatsAppInstalled(context) && UtilsWhatsApp.isUpdateAvailable(UtilsWhatsApp.getInstalledWhatsAppVersion(context), version)) {
+                if (UtilsFuntactiq.isFuntactiqInstalled(context) && UtilsFuntactiq.isUpdateAvailable(UtilsFuntactiq.getInstalledFuntactiqVersion(context), version)) {
                     UtilsUI.showFAB(fab, true);
                     toolbarSubtitle.setText(String.format(context.getResources().getString(R.string.update_available), version));
                     if (appPreferences.getAutoDownload()) {
-                        new UtilsAsync.DownloadFile(context, UtilsEnum.DownloadType.WHATSAPP_APK, version).execute();
+                        new UtilsAsync.DownloadFile(context, UtilsEnum.DownloadType.FUNTACTIQ_APK, version).execute();
                     }
-                } else if(!UtilsWhatsApp.isWhatsAppInstalled(context)){
+                } else if(!UtilsFuntactiq.isFuntactiqInstalled(context)){
                     UtilsUI.showFAB(fab, true);
                     toolbarSubtitle.setText(String.format(context.getResources().getString(R.string.update_not_installed), version));
                 } else {
@@ -88,28 +89,28 @@ public class UtilsAsync {
                     toolbarSubtitle.setText(context.getResources().getString(R.string.update_not_available));
                 }
             } else {
-                latestVersion.setText(context.getResources().getString(R.string.whatsapp_not_available));
+                latestVersion.setText(context.getResources().getString(R.string.funtactiq_not_available));
                 toolbarSubtitle.setText(context.getResources().getString(R.string.update_not_connection));
             }
 
         }
     }
 
-    public static class NotifyWhatsAppVersion extends AsyncTask<Void, Void, String> {
+    public static class NotifyFuntactiqVersion extends AsyncTask<Void, Void, String> {
         private Context context;
         private AppPreferences appPreferences;
         private Intent intent;
 
-        public NotifyWhatsAppVersion(Context context, Intent intent) {
+        public NotifyFuntactiqVersion(Context context, Intent intent) {
             this.context = context;
-            this.appPreferences = WhatsAppBetaUpdaterApplication.getAppPreferences();
+            this.appPreferences = FuntactiqBetaUpdaterApplication.getAppPreferences();
             this.intent = intent;
         }
 
         @Override
         protected String doInBackground(Void... voids) {
             if (UtilsNetwork.isNetworkAvailable(context)) {
-                return getLatestWhatsAppVersion();
+                return getLatestFuntactiqVersion();
             } else {
                 return "0.0.0.0";
             }
@@ -119,7 +120,7 @@ public class UtilsAsync {
         protected void onPostExecute(String version) {
             super.onPostExecute(version);
 
-            if (UtilsWhatsApp.isWhatsAppInstalled(context) && UtilsWhatsApp.isUpdateAvailable(UtilsWhatsApp.getInstalledWhatsAppVersion(context), version)) {
+            if (UtilsFuntactiq.isFuntactiqInstalled(context) && UtilsFuntactiq.isUpdateAvailable(UtilsFuntactiq.getInstalledFuntactiqVersion(context), version)) {
                 String title = String.format(context.getResources().getString(R.string.notification), version);
                 String message = String.format(context.getResources().getString(R.string.notification_description), context.getResources().getString(R.string.app_name));
                 intent.putExtra("title", title);
@@ -173,7 +174,7 @@ public class UtilsAsync {
         protected void onPostExecute(String version) {
             super.onPostExecute(version);
 
-            if (UtilsWhatsApp.isUpdateAvailable(UtilsApp.getAppVersionName(context), version)) {
+            if (UtilsFuntactiq.isUpdateAvailable(UtilsApp.getAppVersionName(context), version)) {
                 UtilsDialog.showUpdateAvailableDialog(context, version);
             }
         }
@@ -206,11 +207,11 @@ public class UtilsAsync {
             });
             dialog = builder.show();
 
-            // Configure type of download: WhatsApp update or Beta Updater update
+            // Configure type of download: Funtactiq update or Beta Updater update
             switch (downloadType) {
-                case WHATSAPP_APK:
-                    filename = "WhatsApp_" + version + ".apk";
-                    downloadUrl = Config.WHATSAPP_APK;
+                case FUNTACTIQ_APK:
+                    filename = "Funtactiq_" + version + ".apk";
+                    downloadUrl = Config.FUNTACTIQ_APK;
                     break;
                 case UPDATE:
                     filename = context.getPackageName() + "_" + version + ".apk";
@@ -232,6 +233,7 @@ public class UtilsAsync {
             Integer lengthOfFile = 0;
 
             try {
+                Log.d("FUNTACTIQ", downloadUrl);
                 URL url = new URL(downloadUrl);
 
                 connection = (HttpURLConnection) url.openConnection();
@@ -290,7 +292,7 @@ public class UtilsAsync {
                 // File download: OK
                 context.startActivity(UtilsIntent.getOpenAPKIntent(file));
                 switch (downloadType) {
-                    case WHATSAPP_APK:
+                    case FUNTACTIQ_APK:
                         UtilsDialog.showSaveAPKDialog(context, file, version);
                         break;
                     case UPDATE:
@@ -312,11 +314,11 @@ public class UtilsAsync {
 
     }
 
-    public static String getLatestWhatsAppVersion() {
+    public static String getLatestFuntactiqVersion() {
         String source = "";
 
         try {
-            URL url = new URL(Config.WHATSAPP_URL);
+            URL url = new URL(Config.FUNTACTIQ_URL);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();

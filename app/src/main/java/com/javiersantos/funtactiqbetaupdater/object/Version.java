@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.object;
+package com.javiersantos.funtactiqbetaupdater.object;
 
 public class Version implements Comparable<Version> {
 

@@ -1,10 +1,10 @@
-package com.javiersantos.whatsappbetaupdater.util;
+package com.javiersantos.funtactiqbetaupdater.util;
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
-import com.javiersantos.whatsappbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.R;
 
 public class UtilsUI {
 

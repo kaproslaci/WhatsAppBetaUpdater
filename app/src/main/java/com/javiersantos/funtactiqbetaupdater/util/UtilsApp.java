@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.util;
+package com.javiersantos.funtactiqbetaupdater.util;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
 
-import com.javiersantos.whatsappbetaupdater.Config;
-import com.javiersantos.whatsappbetaupdater.R;
-import com.javiersantos.whatsappbetaupdater.receiver.NotificationReceiver;
+import com.javiersantos.funtactiqbetaupdater.Config;
+import com.javiersantos.funtactiqbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.receiver.NotificationReceiver;
 
 import java.util.Currency;
 import java.util.Locale;
@@ -45,7 +45,7 @@ public class UtilsApp {
     }
 
     public static String generatePayPalDonationLink(String amount, String currency) {
-        return "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=" + Config.PAYPAL_DONATION + "&currency_code=" + currency + "&amount=" + amount + "&item_name=Donation%20for%20%22Beta%20Updater%20for%20WhatsApp%22";
+        return "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=" + Config.PAYPAL_DONATION + "&currency_code=" + currency + "&amount=" + amount + "&item_name=Donation%20for%20%22Beta%20Updater%20for%20Funtactiq%22";
     }
 
     public static String getPayPalCurrency() {

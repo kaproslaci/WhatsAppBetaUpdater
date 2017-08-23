@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.util;
+package com.javiersantos.funtactiqbetaupdater.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.javiersantos.whatsappbetaupdater.R;
-import com.javiersantos.whatsappbetaupdater.WhatsAppBetaUpdaterApplication;
+import com.javiersantos.funtactiqbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.FuntactiqBetaUpdaterApplication;
 
 import java.io.File;
 
@@ -23,8 +23,8 @@ public class UtilsDialog {
                 .negativeText(context.getResources().getString(android.R.string.cancel));
 
         switch (downloadType) {
-            case WHATSAPP_APK:
-                builder.title(String.format(context.getResources().getString(R.string.downloading), context.getResources().getString(R.string.app_whatsapp), version));
+            case FUNTACTIQ_APK:
+                builder.title(String.format(context.getResources().getString(R.string.downloading), context.getResources().getString(R.string.app_funtactiq), version));
                 break;
             case UPDATE:
                 builder.title(String.format(context.getResources().getString(R.string.downloading), context.getResources().getString(R.string.app_name), version));
@@ -58,7 +58,7 @@ public class UtilsDialog {
     }
 
     public static MaterialDialog showUpdateAvailableDialog(final Context context, final String version) {
-        final AppPreferences appPreferences = WhatsAppBetaUpdaterApplication.getAppPreferences();
+        final AppPreferences appPreferences = FuntactiqBetaUpdaterApplication.getAppPreferences();
 
         MaterialDialog dialog = new MaterialDialog.Builder(context)
                 .title(String.format(context.getResources().getString(R.string.app_update), version))
@@ -113,7 +113,7 @@ public class UtilsDialog {
                 .setAction(context.getResources().getString(R.string.button_share), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String shareText = String.format(context.getResources().getString(R.string.snackbar_share), version, context.getResources().getString(R.string.app_name) + " " + "https://github.com/javiersantos/WhatsAppBetaUpdater/releases");
+                        String shareText = String.format(context.getResources().getString(R.string.snackbar_share), version, context.getResources().getString(R.string.app_name) + " " + "https://github.com/javiersantos/FuntactiqBetaUpdater/releases");
                         context.startActivity(UtilsIntent.getShareAPKIntent(file, shareText));
                     }
                 })

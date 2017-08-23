@@ -1,8 +1,8 @@
-package com.javiersantos.whatsappbetaupdater.activity;
+package com.javiersantos.funtactiqbetaupdater.activity;
 
 import android.os.Bundle;
 
-import com.javiersantos.whatsappbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.R;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsActivity;

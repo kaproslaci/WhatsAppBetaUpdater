@@ -1,4 +1,4 @@
-package com.javiersantos.whatsappbetaupdater.activity;
+package com.javiersantos.funtactiqbetaupdater.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,10 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.javiersantos.whatsappbetaupdater.R;
-import com.javiersantos.whatsappbetaupdater.WhatsAppBetaUpdaterApplication;
-import com.javiersantos.whatsappbetaupdater.util.AppPreferences;
-import com.javiersantos.whatsappbetaupdater.util.UtilsApp;
+import com.javiersantos.funtactiqbetaupdater.R;
+import com.javiersantos.funtactiqbetaupdater.FuntactiqBetaUpdaterApplication;
+import com.javiersantos.funtactiqbetaupdater.util.AppPreferences;
+import com.javiersantos.funtactiqbetaupdater.util.UtilsApp;
 import com.lb.material_preferences_library.PreferenceActivity;
 import com.lb.material_preferences_library.custom_preferences.CheckBoxPreference;
 import com.lb.material_preferences_library.custom_preferences.ListPreference;
@@ -36,7 +36,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.appPreferences = WhatsAppBetaUpdaterApplication.getAppPreferences();
+        this.appPreferences = FuntactiqBetaUpdaterApplication.getAppPreferences();
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         setPreferenceView();

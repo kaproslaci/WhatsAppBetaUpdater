@@ -1,12 +1,12 @@
-package com.javiersantos.whatsappbetaupdater;
+package com.javiersantos.funtactiqbetaupdater;
 
 import android.app.Application;
 
-import com.javiersantos.whatsappbetaupdater.util.AppPreferences;
+import com.javiersantos.funtactiqbetaupdater.util.AppPreferences;
 import com.mikepenz.iconics.Iconics;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
-public class WhatsAppBetaUpdaterApplication extends Application {
+public class FuntactiqBetaUpdaterApplication extends Application {
     private static AppPreferences appPreferences;
 
     @Override

@@ -45,10 +45,10 @@
                     android:gravity="center"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/whatsapp_installed"
+                    android:text="@string/funtactiq_installed"
                     android:singleLine="true" />
                 <TextView
-                    android:id="@+id/whatsapp_installed_version"
+                    android:id="@+id/funtactiq_installed_version"
                     style="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@color/gray"
                     android:gravity="center"
@@ -84,10 +84,10 @@
                         android:gravity="center"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/whatsapp_latest"
+                        android:text="@string/funtactiq_latest"
                         android:singleLine="true" />
                     <TextView
-                        android:id="@+id/whatsapp_latest_version"
+                        android:id="@+id/funtactiq_latest_version"
                         style="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/gray"
                         android:gravity="center"

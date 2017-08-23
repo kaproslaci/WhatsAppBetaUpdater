@@ -1,18 +1,18 @@
-package com.javiersantos.whatsappbetaupdater.util;
+package com.javiersantos.funtactiqbetaupdater.util;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import com.javiersantos.whatsappbetaupdater.BuildConfig;
-import com.javiersantos.whatsappbetaupdater.object.Version;
+import com.javiersantos.funtactiqbetaupdater.BuildConfig;
+import com.javiersantos.funtactiqbetaupdater.object.Version;
 
-public class UtilsWhatsApp {
+public class UtilsFuntactiq {
 
-    public static String getInstalledWhatsAppVersion(Context context) {
+    public static String getInstalledFuntactiqVersion(Context context) {
         String version = "";
 
         try {
-            version = context.getPackageManager().getPackageInfo("com.whatsapp", 0).versionName;
+            version = context.getPackageManager().getPackageInfo("com.funtactiq", 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -20,11 +20,11 @@ public class UtilsWhatsApp {
         return version;
     }
 
-    public static Boolean isWhatsAppInstalled(Context context) {
+    public static Boolean isFuntactiqInstalled(Context context) {
         Boolean res;
 
         try {
-            context.getPackageManager().getPackageInfo("com.whatsapp", 0);
+            context.getPackageManager().getPackageInfo("com.funtactiq", 0);
             res = true;
         } catch (PackageManager.NameNotFoundException e) {
             res = false;
