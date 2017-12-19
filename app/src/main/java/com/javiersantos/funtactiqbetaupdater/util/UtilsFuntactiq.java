@@ -8,11 +8,14 @@ import com.javiersantos.funtactiqbetaupdater.object.Version;
 
 public class UtilsFuntactiq {
 
+    static String packageName = "com.ionicframework.ionicmaps310749";
+
+
     public static String getInstalledFuntactiqVersion(Context context) {
         String version = "";
 
         try {
-            version = context.getPackageManager().getPackageInfo("com.funtactiq", 0).versionName;
+            version = context.getPackageManager().getPackageInfo(packageName, 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -24,7 +27,7 @@ public class UtilsFuntactiq {
         Boolean res;
 
         try {
-            context.getPackageManager().getPackageInfo("com.funtactiq", 0);
+            context.getPackageManager().getPackageInfo(packageName, 0);
             res = true;
         } catch (PackageManager.NameNotFoundException e) {
             res = false;
@@ -37,6 +40,10 @@ public class UtilsFuntactiq {
         if (BuildConfig.DEBUG_MODE) {
             return false;
         } else {
+            installedVersion = installedVersion.replace("-debug","");
+            latestVersion = latestVersion.replace("-debug","");
+
+
             Version installed = new Version(installedVersion);
             Version latest = new Version(latestVersion);
 
