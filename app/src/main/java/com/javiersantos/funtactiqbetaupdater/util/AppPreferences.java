@@ -27,7 +27,7 @@ public class AppPreferences {
     }
 
     public Boolean getAutoDownload() {
-        return sharedPreferences.getBoolean(KeyAutoDownload, false);
+        return sharedPreferences.getBoolean(KeyAutoDownload, true);
     }
 
     public Boolean getShowAppUpdates() {
