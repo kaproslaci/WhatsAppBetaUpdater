@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "com.javiersantos.whatsappbetaupdater"
@@ -26,13 +26,14 @@ android {
         }
         debug {
             versionNameSuffix '-debug'
-            buildConfigField "boolean", "DEBUG_MODE", "true"
+            buildConfigField "boolean", "DEBUG_MODE", "false"
         }
     }
 
     lintOptions {
         disable 'MissingTranslation'
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 repositories {
