@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // Check if there is a newest Funtactiq update and show UI changes
-        //new UtilsAsync.LatestFuntactiqVersion(this, funtactiq_latest_version, toolbar_subtitle, fab, progressWheel).execute();
+        new UtilsAsync.LatestFuntactiqVersion(this, funtactiq_latest_version, toolbar_subtitle, fab, progressWheel).execute();
 
         // Get latest Funtactiq installed version
         checkInstalledFuntactiqVersion();
