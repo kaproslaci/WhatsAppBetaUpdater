@@ -2,9 +2,9 @@ package com.javiersantos.funtactiqbetaupdater;
 
 public class Config {
 
-    public static final String GITHUB_URL = "http://fundater.azurewebsites.net";
-    public static final String GITHUB_TAGS = GITHUB_URL.concat("/new");
-    public static final String GITHUB_APK = GITHUB_URL.concat("/assets/releases/download/");
+    public static final String GITHUB_URL = "https://github.com/kaproslaci/WhatsAppBetaUpdater.git";
+    public static final String GITHUB_TAGS = GITHUB_URL.concat("/tags");
+    public static final String GITHUB_APK = GITHUB_URL.concat("/releases/download/");
     public static final String FUNTACTIQ_URL = "http://fundater.azurewebsites.net";
     //public static final String FUNTACTIQ_APK = FUNTACTIQ_URL.concat("/assets/releases/download/v1.0.0/com.funtactiq.apk");
     public static final String FUNTACTIQ_APK = "https://fundater.blob.core.windows.net/apks/com.funtactiq.apk";
