@@ -1,10 +1,15 @@
 package com.javiersantos.funtactiqbetaupdater.util;
 
+import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Debug;
 import android.os.Environment;
@@ -221,140 +226,6 @@ public class UtilsAsync {
         }
     }
 
-    public static class DownloadFile extends AsyncTask<Void, Integer, Integer> {
-        private Context context;
-        private MaterialDialog dialog;
-        private UtilsEnum.DownloadType downloadType;
-        private String version, path, filename, downloadUrl;
-
-        public DownloadFile(Context context, UtilsEnum.DownloadType downloadType, String version) {
-            this.context = context;
-            this.version = version;
-            this.downloadType = downloadType;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
-
-            // Configure cancel button and show progress dialog
-            MaterialDialog.Builder builder = UtilsDialog.showDownloadingDialog(context, downloadType, version);
-            builder.onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(MaterialDialog dialog, DialogAction which) {
-                    cancel(true);
-                }
-            });
-            dialog = builder.show();
-
-            // Configure type of download: Funtactiq update or Beta Updater update
-            switch (downloadType) {
-                case FUNTACTIQ_APK:
-                    filename = "Funtactiq_" + version + ".apk";
-                    downloadUrl = Config.FUNTACTIQ_APK;
-                    break;
-                case UPDATE:
-                    filename = context.getPackageName() + "_" + version + ".apk";
-                    downloadUrl = Config.GITHUB_APK + "v" + version + "/" + context.getPackageName() + ".apk";
-                    break;
-            }
-
-            // Create download directory if doesn't exist
-            File file = new File(path);
-            if (!file.exists()) { file.mkdir(); }
-
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            InputStream input = null;
-            OutputStream output = null;
-            HttpURLConnection connection = null;
-            Integer lengthOfFile = 0;
-
-            try {
-                Log.d("FUNTACTIQ", downloadUrl);
-                URL url = new URL(downloadUrl);
-
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-                // Getting file lenght
-                lengthOfFile = connection.getContentLength();
-                // Read file
-                input = connection.getInputStream();
-                // Where to write file
-                output = new FileOutputStream(new File(path, filename));
-
-                byte data[] = new byte[4096];
-                long total = 0;
-                int count;
-
-                while ((count = input.read(data)) != -1) {
-                    // Close input if download has been cancelled
-                    if (isCancelled()) {
-                        input.close();
-                        return null;
-                    }
-                    total += count;
-                    // Updating download progress
-                    if (lengthOfFile > 0) {
-                        publishProgress((int) ((total * 100) / lengthOfFile));
-                    }
-                    output.write(data, 0, count);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            } finally {
-                try {
-                    if (output != null) { output.close(); }
-                    if (input != null) { input.close(); }
-                } catch (IOException ignored) {}
-
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
-
-            return lengthOfFile;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            dialog.setProgress(progress[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Integer file_length) {
-            UtilsHelper.dismissDialog(dialog);
-            File file = new File(path, filename);
-            if (file_length != null && file.length() == file_length) {
-                // File download: OK
-                context.startActivity(UtilsIntent.getOpenAPKIntent(file));
-                switch (downloadType) {
-                    case FUNTACTIQ_APK:
-                        UtilsDialog.showSaveAPKDialog(context, file, version);
-                        break;
-                    case UPDATE:
-                        break;
-                }
-            } else {
-                // File download: FAILED
-                onCancelled();
-                UtilsDialog.showSnackbar(context, context.getResources().getString(R.string.snackbar_failed));
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            // Delete uncompleted file
-            File file = new File(path, filename);
-            if (file.exists()) { file.delete(); }
-        }
-
-    }
-
     public static String getLatestFuntactiqVersion() {
         String source = "";
 
@@ -562,6 +433,217 @@ public class UtilsAsync {
         }
 
         return jsonObject;
+    }
+
+
+    public static class DownloadFile extends AsyncTask <Void, Integer, Integer> {
+
+        DownloadManager downloadManager;
+        long downloadReference;
+        BroadcastReceiver receiverNDownloadComplete;
+        BroadcastReceiver receiverNotificationClicked;
+        private Context context;
+
+        private MaterialDialog dialog;
+        private UtilsEnum.DownloadType downloadType;
+        private String version, path, filename, downloadUrl;
+
+        public DownloadFile(Context context, UtilsEnum.DownloadType downloadType, String version) {
+            this.context = context;
+            this.version = version;
+            this.downloadType = downloadType;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+
+            // Configure cancel button and show progress dialog
+            MaterialDialog.Builder builder = UtilsDialog.showDownloadingDialog(context, downloadType, version);
+            builder.onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(MaterialDialog dialog, DialogAction which) {
+                    cancel(true);
+                }
+            });
+            dialog = builder.show();
+
+            // Configure type of download: Funtactiq update or Beta Updater update
+            switch (downloadType) {
+                case FUNTACTIQ_APK:
+                    filename = "Funtactiq_" + version + ".apk";
+                    downloadUrl = Config.FUNTACTIQ_APK;
+                    break;
+                case UPDATE:
+                    filename = context.getPackageName() + "_" + version + ".apk";
+                    downloadUrl = Config.GITHUB_APK + "v" + version + "/" + context.getPackageName() + ".apk";
+                    break;
+            }
+
+            // Create download directory if doesn't exist
+            File file = new File(path);
+            if (!file.exists()) { file.mkdir(); }
+
+        }
+
+        protected Integer doInBackground(Void... params) {
+            downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            Uri uri = Uri.parse(downloadUrl);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setDescription("Funtactiq Application Update").setTitle("Update in progress");
+            //request.setDestinationInExternalFilesDir(context, , filename);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+            request.setVisibleInDownloadsUi(true);
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
+            downloadReference = downloadManager.enqueue(request);
+
+
+
+
+            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+            receiverNotificationClicked = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String extraId = DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS;
+                    long[] references = intent.getLongArrayExtra(extraId);
+                    for(long reference : references) {
+                        if(reference == downloadReference) {
+                            //TODO
+                        }
+                    }
+                }
+            };
+            context.registerReceiver(receiverNotificationClicked, filter);
+
+            IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            receiverNDownloadComplete = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    long reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                    if(downloadReference == reference) {
+                        DownloadManager.Query query = new DownloadManager.Query();
+                        query.setFilterById(reference);
+                        Cursor cursor = downloadManager.query(query);
+
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                        int status = cursor.getInt(columnIndex);
+                        int fileNameIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
+                        String savedFilePath = cursor.getString(fileNameIndex);
+                        int columnReason = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+                        int reason = cursor.getInt(columnReason);
+                        switch (status) {
+                            case DownloadManager.STATUS_SUCCESSFUL: {
+                                Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                            case DownloadManager.STATUS_FAILED: {
+                                Toast.makeText(context, "Fail", Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                            case DownloadManager.STATUS_PAUSED: {
+                                Toast.makeText(context, "Pause", Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                            case DownloadManager.STATUS_PENDING: {
+                                Toast.makeText(context, "Pending", Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                            case DownloadManager.STATUS_RUNNING: {
+                                Toast.makeText(context, "Running", Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                        }
+
+
+//                        context.startActivity(UtilsIntent.getOpenAPKIntent(file));
+//                        switch (downloadType) {
+//                            case FUNTACTIQ_APK:
+//
+//                                break;
+//                            case UPDATE:
+//                                break;
+//                        }
+                    }
+                }
+            };
+
+            boolean downloading = true;
+            Integer status = null;
+            while (downloading) {
+
+                DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(downloadReference);
+                Cursor cursor = downloadManager.query(query);
+
+                cursor.moveToFirst();
+                int bytes_downloaded = cursor.getInt(cursor
+                        .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                    downloading = false;
+
+                }
+                else if (status == DownloadManager.STATUS_FAILED) {
+                    downloading = false;
+                }
+
+                final double dl_progress = (bytes_downloaded / (double)bytes_total) * 100;
+
+                this.publishProgress((int)dl_progress);
+                cursor.close();
+            }
+
+            return status;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer status) {
+            File file = new File(path, filename);
+            switch (status) {
+                case DownloadManager.STATUS_SUCCESSFUL: {
+                    context.startActivity(UtilsIntent.getOpenAPKIntent(file));
+                    Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
+                    UtilsHelper.dismissDialog(dialog);
+                    UtilsDialog.showSaveAPKDialog(context, file, version);
+                    break;
+                }
+                case DownloadManager.STATUS_FAILED: {
+                    UtilsDialog.showSnackbar(context, context.getResources().getString(R.string.snackbar_failed));
+                    Toast.makeText(context, "Fail", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                case DownloadManager.STATUS_PAUSED: {
+                    Toast.makeText(context, "Pause", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                case DownloadManager.STATUS_PENDING: {
+                    Toast.makeText(context, "Pending", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                case DownloadManager.STATUS_RUNNING: {
+                    Toast.makeText(context, "Running", Toast.LENGTH_LONG).show();
+                    break;
+                }
+            }
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            // Delete uncompleted file
+            File file = new File(path, filename);
+            if (file.exists()) { file.delete(); }
+        }
+
     }
 
 
